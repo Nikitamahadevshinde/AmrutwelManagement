@@ -3,6 +3,7 @@ const renterRoutes = require("./routes/renterRoutes");
 const connectDB = require("./config/db");
 
 const app = express();
+app.use(express.json());
 connectDB();//connects the database.
 
 const PORT = 5000;
