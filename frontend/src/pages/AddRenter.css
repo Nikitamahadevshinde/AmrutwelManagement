@@ -1,0 +1,25 @@
+.add-renter-container {
+  width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.add-renter-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.add-renter-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.add-renter-container button {
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+}

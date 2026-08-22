@@ -1,0 +1,27 @@
+.renter-list-container {
+  width: 90%;
+  margin: 40px auto;
+}
+
+.renter-list-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.renter-list-container table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.renter-list-container th,
+.renter-list-container td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.renter-list-container th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
