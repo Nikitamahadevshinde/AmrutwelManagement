@@ -2,7 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const renterRoutes = require("./routes/renterRoutes");
 const unitRoutes = require("./routes/unitRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+
 const connectDB = require("./config/db");
+
 
 const app = express();
 
@@ -14,7 +17,7 @@ const PORT = 5000;
 
 app.use("/api/renters", renterRoutes);//connect renter routes
 app.use("/api/units", unitRoutes);//connect unit routes
-
+app.use("/api/payments", paymentRoutes);
 
 app.get("/", (req, res) => {
     res.send("Amrutwel Management Backend Running 🚀");

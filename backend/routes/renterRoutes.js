@@ -11,25 +11,55 @@ const router = express.Router();
 
 const validateRenter = (data) => {
 
-  const { name, phone, roomNumber } = data;
+  const {
+    name,
+    phone,
+    roomNumber,
+    joiningDate
+  } = data;
 
-  if (!name || !phone || !roomNumber) {
-    return "Name, phone and room number are required";
+  // Required fields
+  if (
+    !name ||
+    !phone ||
+    !roomNumber ||
+    !joiningDate
+  ) {
+    return "Name, phone, room number and joining date are required";
   }
 
+
+  // Name validation
   if (!/^[A-Za-z\s]+$/.test(name.trim())) {
     return "Name can contain only letters and spaces";
   }
 
+
+  // Phone validation
   if (!/^\d{10}$/.test(String(phone))) {
     return "Phone number must contain exactly 10 digits";
   }
 
+
+  // Room number validation
   const room = Number(roomNumber);
 
-  if (!Number.isInteger(room) || room < 1 || room > 20) {
+  if (
+    !Number.isInteger(room) ||
+    room < 1 ||
+    room > 20
+  ) {
     return "Room number must be between 1 and 20";
   }
+
+
+  // Joining date validation
+  const date = new Date(joiningDate);
+
+  if (isNaN(date.getTime())) {
+    return "Invalid joining date";
+  }
+
 
   return null;
 };
@@ -66,6 +96,7 @@ router.post("/", async (req, res) => {
 
   try {
 
+    // Validate renter
     const validationError = validateRenter(req.body);
 
     if (validationError) {
@@ -99,7 +130,8 @@ router.post("/", async (req, res) => {
     if (unit.occupancyType === "Owner") {
 
       return res.status(400).json({
-        message: "This room belongs to the owner and cannot be assigned to a renter"
+        message:
+          "This room belongs to the owner and cannot be assigned to a renter"
       });
 
     }
@@ -115,7 +147,10 @@ router.post("/", async (req, res) => {
     }
 
 
+    // ==========================================
     // Create renter
+    // ==========================================
+
     const renter = new Renter({
 
       name: req.body.name.trim(),
@@ -126,7 +161,9 @@ router.post("/", async (req, res) => {
 
       roomType: unit.unitType,
 
-      monthlyRent: unit.monthlyRent
+      monthlyRent: unit.monthlyRent,
+
+      joiningDate: req.body.joiningDate
 
     });
 
@@ -134,7 +171,10 @@ router.post("/", async (req, res) => {
     await renter.save();
 
 
+    // ==========================================
     // Update unit
+    // ==========================================
+
     unit.status = "Occupied";
 
     unit.occupancyType = "Renter";
@@ -143,6 +183,10 @@ router.post("/", async (req, res) => {
 
     await unit.save();
 
+
+    // ==========================================
+    // Response
+    // ==========================================
 
     res.status(201).json({
 
@@ -156,6 +200,8 @@ router.post("/", async (req, res) => {
 
 
   } catch (error) {
+
+    console.error("Add renter error:", error);
 
     res.status(500).json({
       message: error.message
@@ -200,7 +246,10 @@ router.delete("/:id", async (req, res) => {
 
 
     // Make room vacant
-    if (unit && unit.occupancyType === "Renter") {
+    if (
+      unit &&
+      unit.occupancyType === "Renter"
+    ) {
 
       unit.status = "Vacant";
 
@@ -225,6 +274,8 @@ router.delete("/:id", async (req, res) => {
 
 
   } catch (error) {
+
+    console.error("Delete renter error:", error);
 
     res.status(500).json({
       message: error.message
@@ -300,6 +351,7 @@ router.put("/:id", async (req, res) => {
       }
 
 
+      // Update renter
       renter.name = req.body.name.trim();
 
       renter.phone = String(req.body.phone);
@@ -309,6 +361,8 @@ router.put("/:id", async (req, res) => {
       renter.roomType = unit.unitType;
 
       renter.monthlyRent = unit.monthlyRent;
+
+      renter.joiningDate = req.body.joiningDate;
 
 
       await renter.save();
@@ -373,14 +427,17 @@ router.put("/:id", async (req, res) => {
     }
 
 
-    // Old unit
+    // Find old unit
     const oldUnit = await Unit.findOne({
       unitNumber: oldRoomNumber
     });
 
 
     // Make old room vacant
-    if (oldUnit && oldUnit.occupancyType === "Renter") {
+    if (
+      oldUnit &&
+      oldUnit.occupancyType === "Renter"
+    ) {
 
       oldUnit.status = "Vacant";
 
@@ -403,6 +460,8 @@ router.put("/:id", async (req, res) => {
     renter.roomType = newUnit.unitType;
 
     renter.monthlyRent = newUnit.monthlyRent;
+
+    renter.joiningDate = req.body.joiningDate;
 
 
     await renter.save();
@@ -432,6 +491,8 @@ router.put("/:id", async (req, res) => {
 
 
   } catch (error) {
+
+    console.error("Update renter error:", error);
 
     res.status(500).json({
       message: error.message

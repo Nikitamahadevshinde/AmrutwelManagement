@@ -1,67 +1,120 @@
-
 import { useState } from "react";
 
 import AddRenter from "./pages/AddRenter";
 import RenterList from "./pages/RenterList";
 import UnitManagement from "./pages/UnitManagement";
+import PaymentTracking from "./pages/PaymentTracking";
+
 
 function App() {
+
   const [activePage, setActivePage] = useState("renters");
 
-  const [refreshRenterList, setRefreshRenterList] = useState(0);
+  const [refreshRenterList, setRefreshRenterList] =
+    useState(0);
+
 
   const handleRenterAdded = () => {
-    setRefreshRenterList((value) => value + 1);
+
+    setRefreshRenterList(
+      (value) => value + 1
+    );
+
   };
 
+
   return (
+
     <div>
 
       {/* Navigation */}
+
       <nav>
-        <h2>AMRUTWEL MANAGEMENT</h2>
+
+        <h2>
+          AMRUTWEL MANAGEMENT
+        </h2>
+
 
         <div>
-          <button onClick={() => setActivePage("renters")}>
+
+          <button
+            onClick={() =>
+              setActivePage("renters")
+            }
+          >
             Renters
           </button>
 
-          <button onClick={() => setActivePage("units")}>
+
+          <button
+            onClick={() =>
+              setActivePage("units")
+            }
+          >
             Units
           </button>
+
+
+          <button
+            onClick={() =>
+              setActivePage("payments")
+            }
+          >
+            Payments
+          </button>
+
         </div>
+
       </nav>
 
 
       {/* Renters Page */}
+
       {activePage === "renters" && (
+
         <>
-          <AddRenter onRenterAdded={handleRenterAdded} />
+
+          <AddRenter
+            onRenterAdded={
+              handleRenterAdded
+            }
+          />
+
 
           <RenterList
-            refreshRenterList={refreshRenterList}
+            refreshRenterList={
+              refreshRenterList
+            }
           />
+
         </>
+
       )}
 
 
       {/* Units Page */}
-       {/* {activePage === "units" && (
-        <div>
-          <h1>Unit Management</h1>
 
-          <p>Unit Management page coming next...</p>
-        </div>
-      )} */}
-      
       {activePage === "units" && (
+
         <UnitManagement />
+
       )}
 
-    </div> 
-       
+
+      {/* Payment Tracking Page */}
+
+      {activePage === "payments" && (
+
+        <PaymentTracking />
+
+      )}
+
+    </div>
+
   );
+
 }
 
-export default App;
 
+export default App;

@@ -6,6 +6,7 @@ function AddRenter({ onRenterAdded }) {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [joiningDate, setJoiningDate] = useState("");
 
   const [units, setUnits] = useState([]);
   const [roomNumber, setRoomNumber] = useState("");
@@ -127,11 +128,14 @@ function AddRenter({ onRenterAdded }) {
   const handleSubmit = async () => {
 
     // Check required fields
-    if (
-      !name.trim() ||
-      !phone ||
-      !roomNumber
-    ) {
+      if (
+         !name.trim() ||
+         !phone ||
+         !joiningDate ||
+         !roomNumber
+         )
+    
+     {
 
       setMessage("❌ Please fill in all fields.");
 
@@ -183,18 +187,19 @@ function AddRenter({ onRenterAdded }) {
 
     const renterData = {
 
-      name: name.trim(),
+    name: name.trim(),
 
-      phone: phone,
+    phone: phone,
 
-      roomNumber: String(selectedUnit.unitNumber),
+   joiningDate: joiningDate,
 
-      roomType: selectedUnit.unitType,
+   roomNumber: String(selectedUnit.unitNumber),
 
-      monthlyRent: selectedUnit.monthlyRent
+   roomType: selectedUnit.unitType,
 
-    };
+   monthlyRent: selectedUnit.monthlyRent
 
+   };
 
     try {
 
@@ -264,6 +269,7 @@ function AddRenter({ onRenterAdded }) {
       setRoomNumber("");
       setRoomType("");
       setMonthlyRent("");
+      setJoiningDate("");
 
 
       // Refresh available rooms
@@ -320,6 +326,14 @@ function AddRenter({ onRenterAdded }) {
         onChange={handlePhoneChange}
       />
 
+       
+       {/* Joining Date */}
+
+        <input
+        type="date"
+        value={joiningDate}
+        onChange={(e) => setJoiningDate(e.target.value)}
+      />
 
       {/* Room */}
 
