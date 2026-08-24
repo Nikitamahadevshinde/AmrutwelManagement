@@ -1,116 +1,392 @@
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import "./AddRenter.css";
 
 function AddRenter({ onRenterAdded }) {
 
-  // State variables store the values entered by the user
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+
+  const [units, setUnits] = useState([]);
   const [roomNumber, setRoomNumber] = useState("");
+
   const [roomType, setRoomType] = useState("");
   const [monthlyRent, setMonthlyRent] = useState("");
+
   const [message, setMessage] = useState("");
 
-  // Function to handle form submission
-  const handleSubmit = async () => {
 
-    const renterData = {
-      name,
-      phone,
-      roomNumber,
-      roomType,
-      monthlyRent
-    };
+  // ==========================================
+  // Fetch units
+  // ==========================================
+
+  useEffect(() => {
+    fetchUnits();
+  }, []);
+
+
+  const fetchUnits = async () => {
 
     try {
+
       const response = await fetch(
-        "http://localhost:5000/api/renters",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(renterData)
-        }
+        "http://localhost:5000/api/units"
       );
 
       const data = await response.json();
 
-      console.log("Renter added successfully:", data);
+      // Only show rooms available for renters
+      const availableUnits = data.filter(
+        (unit) =>
+          unit.status === "Vacant" &&
+          unit.occupancyType === "None"
+      );
 
-      setMessage("✅ Renter added successfully!");
+      setUnits(availableUnits);
 
-      // Tell App.jsx that a renter was added
+    } catch (error) {
+
+      console.error("Error fetching units:", error);
+
+      setMessage("❌ Failed to load available rooms");
+
+    }
+  };
+
+
+  // ==========================================
+  // Name
+  // ==========================================
+
+  const handleNameChange = (e) => {
+
+    const value = e.target.value;
+
+    if (/^[A-Za-z\s]*$/.test(value)) {
+      setName(value);
+    }
+
+  };
+
+
+  // ==========================================
+  // Phone
+  // ==========================================
+
+  const handlePhoneChange = (e) => {
+
+    const value = e.target.value;
+
+    if (/^\d{0,10}$/.test(value)) {
+      setPhone(value);
+    }
+
+  };
+
+
+  // ==========================================
+  // Room selection
+  // ==========================================
+
+  const handleRoomChange = (e) => {
+
+    const selectedRoomNumber = e.target.value;
+
+    setRoomNumber(selectedRoomNumber);
+
+
+    // Find selected unit
+    const selectedUnit = units.find(
+      (unit) =>
+        String(unit.unitNumber) === selectedRoomNumber
+    );
+
+
+    if (selectedUnit) {
+
+      // Automatically get room type
+      setRoomType(selectedUnit.unitType);
+
+      // Automatically get rent
+      setMonthlyRent(String(selectedUnit.monthlyRent));
+
+    } else {
+
+      setRoomType("");
+      setMonthlyRent("");
+
+    }
+
+  };
+
+
+  // ==========================================
+  // Submit
+  // ==========================================
+
+  const handleSubmit = async () => {
+
+    // Check required fields
+    if (
+      !name.trim() ||
+      !phone ||
+      !roomNumber
+    ) {
+
+      setMessage("❌ Please fill in all fields.");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+
+      return;
+    }
+
+
+    // Phone validation
+    if (phone.length !== 10) {
+
+      setMessage(
+        "❌ Please enter a valid 10-digit phone number."
+      );
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+
+      return;
+    }
+
+
+    // Find selected unit
+    const selectedUnit = units.find(
+      (unit) =>
+        String(unit.unitNumber) === String(roomNumber)
+    );
+
+
+    if (!selectedUnit) {
+
+      setMessage("❌ Please select a valid vacant room.");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+
+      return;
+    }
+
+
+    // ==========================================
+    // Data sent to backend
+    // ==========================================
+
+    const renterData = {
+
+      name: name.trim(),
+
+      phone: phone,
+
+      roomNumber: String(selectedUnit.unitNumber),
+
+      roomType: selectedUnit.unitType,
+
+      monthlyRent: selectedUnit.monthlyRent
+
+    };
+
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:5000/api/renters",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify(renterData)
+
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      // ==========================================
+      // Backend error
+      // ==========================================
+
+      if (!response.ok) {
+
+        setMessage(
+          `❌ ${data.message || "Failed to add renter"}`
+        );
+
+        setTimeout(() => {
+          setMessage("");
+        }, 3000);
+
+        return;
+      }
+
+
+      // ==========================================
+      // Success
+      // ==========================================
+
+      console.log(
+        "Renter added successfully:",
+        data
+      );
+
+
+      setMessage(
+        "✅ Renter added successfully!"
+      );
+
+
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+
+
+      // Tell App.jsx
       onRenterAdded();
 
-      // Clear the form
+
+      // Clear form
       setName("");
       setPhone("");
       setRoomNumber("");
       setRoomType("");
       setMonthlyRent("");
 
+
+      // Refresh available rooms
+      fetchUnits();
+
+
     } catch (error) {
 
-      console.error("Error adding renter:", error);
+      console.error(
+        "Error adding renter:",
+        error
+      );
 
-      setMessage("❌ Failed to add renter");
+      setMessage(
+        "❌ Failed to connect to server"
+      );
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+
     }
+
   };
 
+
+  // ==========================================
+  // UI
+  // ==========================================
+
   return (
+
     <div className="add-renter-container">
 
       <h1>Add Renter</h1>
 
-      {/* Controlled inputs:
-          value displays the state
-          onChange updates the state
-      */}
+
+      {/* Name */}
 
       <input
         type="text"
         placeholder="Enter Name"
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={handleNameChange}
       />
+
+
+      {/* Phone */}
 
       <input
         type="text"
-        placeholder="Enter Phone"
+        placeholder="Enter 10-digit Phone Number"
         value={phone}
-        onChange={(e) => setPhone(e.target.value)}
+        onChange={handlePhoneChange}
       />
 
-      <input
-        type="text"
-        placeholder="Enter Room Number"
+
+      {/* Room */}
+
+      <select
         value={roomNumber}
-        onChange={(e) => setRoomNumber(e.target.value)}
-      />
+        onChange={handleRoomChange}
+      >
+
+        <option value="">
+          Select Vacant Room
+        </option>
+
+
+        {units.map((unit) => (
+
+          <option
+            key={unit._id}
+            value={unit.unitNumber}
+          >
+
+            Room {unit.unitNumber} — {unit.unitType} — ₹
+            {unit.monthlyRent}
+
+          </option>
+
+        ))}
+
+      </select>
+
+
+      {/* Room Type */}
 
       <input
         type="text"
-        placeholder="Enter Room Type"
+        placeholder="Room Type"
         value={roomType}
-        onChange={(e) => setRoomType(e.target.value)}
+        readOnly
       />
+
+
+      {/* Monthly Rent */}
 
       <input
         type="number"
-        placeholder="Enter Monthly Rent"
+        placeholder="Monthly Rent"
         value={monthlyRent}
-        onChange={(e) => setMonthlyRent(e.target.value)}
+        readOnly
       />
 
+
+      {/* Message */}
+
       <p>{message}</p>
+
+
+      {/* Button */}
 
       <button onClick={handleSubmit}>
         Add Renter
       </button>
 
     </div>
+
   );
+
 }
 
+
 export default AddRenter;
+

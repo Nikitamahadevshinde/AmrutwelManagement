@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const renterRoutes = require("./routes/renterRoutes");
+const unitRoutes = require("./routes/unitRoutes");
 const connectDB = require("./config/db");
 
 const app = express();
@@ -12,6 +13,7 @@ connectDB();//connects the database.
 const PORT = 5000;
 
 app.use("/api/renters", renterRoutes);//connect renter routes
+app.use("/api/units", unitRoutes);//connect unit routes
 
 
 app.get("/", (req, res) => {
