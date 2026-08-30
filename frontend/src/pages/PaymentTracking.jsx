@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import "./PaymentTracking.css";
 
@@ -203,7 +204,7 @@ function PaymentTracking() {
 
   // =====================================================
   // FORMAT MONTH
-  // Example: August 2026
+  // Example: July 2026
   // =====================================================
 
   const formatMonth = (date) => {
@@ -220,11 +221,59 @@ function PaymentTracking() {
 
 
   // =====================================================
-  // GENERATE ALL RENT MONTHS
-  // FROM JOINING DATE TO CURRENT MONTH
+  // ADD MONTHS WITHOUT DATE SHIFTING
+  //
+  // This handles dates like:
+  // 15th → 15th
+  // 20th → 20th
+  // 31st → last valid day of next month
   // =====================================================
 
-  const getRentMonths = () => {
+  const addMonths = (date, months) => {
+
+    const originalDay =
+      date.getDate();
+
+    const result =
+      new Date(
+        date.getFullYear(),
+        date.getMonth() + months,
+        1
+      );
+
+    const lastDayOfTargetMonth =
+      new Date(
+        result.getFullYear(),
+        result.getMonth() + 1,
+        0
+      ).getDate();
+
+    result.setDate(
+      Math.min(
+        originalDay,
+        lastDayOfTargetMonth
+      )
+    );
+
+    return result;
+
+  };
+
+
+  // =====================================================
+  // CHECK WHETHER A RENTAL MONTH IS COMPLETED
+  //
+  // Example:
+  //
+  // Joining Date = 15 July
+  //
+  // 14 August → false
+  // 15 August → true
+  // 30 August → true
+  // 15 September → second month completed
+  // =====================================================
+
+  const getCompletedRentMonths = () => {
 
     if (
       !renter ||
@@ -244,44 +293,70 @@ function PaymentTracking() {
       new Date();
 
 
-    // Start from joining month
+    // Remove time from today's date
 
-    let currentMonth =
-      new Date(
-        joiningDate.getFullYear(),
-        joiningDate.getMonth(),
-        1
-      );
-
-
-    // Current month
-
-    const lastMonth =
-      new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        1
-      );
+    today.setHours(
+      0,
+      0,
+      0,
+      0
+    );
 
 
     const months = [];
 
+    let monthNumber = 1;
 
-    while (
-      currentMonth <= lastMonth
-    ) {
 
-      months.push(
-        formatMonth(currentMonth)
+    while (true) {
+
+      // Calculate the date on which
+      // this rental month completes
+
+      const completionDate =
+        addMonths(
+          joiningDate,
+          monthNumber
+        );
+
+
+      completionDate.setHours(
+        0,
+        0,
+        0,
+        0
       );
 
 
-      currentMonth =
-        new Date(
-          currentMonth.getFullYear(),
-          currentMonth.getMonth() + 1,
-          1
+      // If the rental month has not
+      // completed yet, stop here
+
+      if (completionDate > today) {
+
+        break;
+
+      }
+
+
+      // The payment is identified by
+      // the month in which the rental
+      // period started
+
+      const periodStart =
+        addMonths(
+          joiningDate,
+          monthNumber - 1
         );
+
+
+      months.push({
+        month: formatMonth(periodStart),
+        periodStart: periodStart,
+        completionDate: completionDate
+      });
+
+
+      monthNumber++;
 
     }
 
@@ -292,15 +367,15 @@ function PaymentTracking() {
 
 
   // =====================================================
-  // ALL RENT MONTHS
+  // ALL COMPLETED RENT MONTHS
   // =====================================================
 
   const rentMonths =
-    getRentMonths();
+    getCompletedRentMonths();
 
 
   // =====================================================
-  // FIND PAYMENT FOR A MONTH
+  // FIND PAYMENT FOR A RENTAL MONTH
   // =====================================================
 
   const getPaymentForMonth = (month) => {
@@ -320,8 +395,10 @@ function PaymentTracking() {
 
   const paidMonths =
     rentMonths.filter(
-      (month) =>
-        getPaymentForMonth(month)
+      (rentMonth) =>
+        getPaymentForMonth(
+          rentMonth.month
+        )
     );
 
 
@@ -331,8 +408,10 @@ function PaymentTracking() {
 
   const unpaidMonths =
     rentMonths.filter(
-      (month) =>
-        !getPaymentForMonth(month)
+      (rentMonth) =>
+        !getPaymentForMonth(
+          rentMonth.month
+        )
     );
 
 
@@ -722,7 +801,7 @@ function PaymentTracking() {
                   {renter.joiningDate
                     ? new Date(
                         renter.joiningDate
-                      ).toLocaleDateString()
+                      ).toLocaleDateString("en-GB")
                     : "-"}
 
                 </strong>
@@ -837,7 +916,7 @@ function PaymentTracking() {
               {rentMonths.length === 0 ? (
 
                 <p>
-                  No rent months available.
+                  No completed rent months yet.
                 </p>
 
               ) : (
@@ -845,11 +924,11 @@ function PaymentTracking() {
                 <div className="rent-month-list">
 
                   {rentMonths.map(
-                    (month) => {
+                    (rentMonth) => {
 
                       const payment =
                         getPaymentForMonth(
-                          month
+                          rentMonth.month
                         );
 
 
@@ -860,7 +939,7 @@ function PaymentTracking() {
                       return (
 
                         <div
-                          key={month}
+                          key={rentMonth.month}
                           className={`rent-month-row ${
                             isPaid
                               ? "month-paid"
@@ -872,7 +951,7 @@ function PaymentTracking() {
                           <div className="month-name">
 
                             <strong>
-                              {month}
+                              {rentMonth.month}
                             </strong>
 
                           </div>
@@ -911,7 +990,9 @@ function PaymentTracking() {
                                 {payment.paymentDate
                                   ? new Date(
                                       payment.paymentDate
-                                    ).toLocaleDateString()
+                                    ).toLocaleDateString(
+                                      "en-GB"
+                                    )
                                   : "-"}
 
                               </span>
@@ -922,15 +1003,17 @@ function PaymentTracking() {
                                 className="pay-button"
                                 disabled={
                                   payingMonth ===
-                                  month
+                                  rentMonth.month
                                 }
                                 onClick={() =>
-                                  handlePay(month)
+                                  handlePay(
+                                    rentMonth.month
+                                  )
                                 }
                               >
 
                                 {payingMonth ===
-                                month
+                                rentMonth.month
                                   ? "Processing..."
                                   : "Pay"}
 
@@ -1039,7 +1122,9 @@ function PaymentTracking() {
                             {payment.paymentDate
                               ? new Date(
                                   payment.paymentDate
-                                ).toLocaleDateString()
+                                ).toLocaleDateString(
+                                  "en-GB"
+                                )
                               : "-"}
 
                           </td>
@@ -1072,3 +1157,4 @@ function PaymentTracking() {
 
 
 export default PaymentTracking;
+
