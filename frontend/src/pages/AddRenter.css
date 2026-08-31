@@ -1,25 +1,272 @@
+
+/* =====================================================
+   ADD RENTER PAGE
+===================================================== */
+
 .add-renter-container {
-  width: 400px;
-  margin: 50px auto;
-  padding: 30px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  width: 100%;
+  max-width: 720px;
+
+  margin: 20px auto;
+  padding: 32px 36px;
+
+  background-color: #ffffff;
+
+  border: 1px solid #dbe3ed;
+  border-radius: 14px;
+
+  box-shadow: 0 4px 18px rgba(31, 65, 114, 0.08);
+
+  text-align: left;
 }
+
+
+/* =====================================================
+   HEADING
+===================================================== */
 
 .add-renter-container h1 {
-  text-align: center;
-  margin-bottom: 25px;
+  margin: 0 0 8px;
+
+   color: #173d8a;
+
+  font-size: 28px;
+  font-weight: 650;
+
+  text-align: center ;
 }
 
-.add-renter-container input {
+
+/* Small description below heading */
+
+.add-renter-container h1::after {
+  content: "Add a new renter and assign a vacant room.";
+
+  display: block;
+
+  margin-top: 7px;
+
+  color: #718096;
+
+  font-size: 14px;
+  font-weight: 400;
+}
+
+
+/* =====================================================
+   FORM INPUTS
+===================================================== */
+
+.add-renter-container input,
+.add-renter-container select {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
+
+  height: 46px;
+
+  padding: 0 13px;
+
+  margin-bottom: 16px;
+
+  border: 1px solid #d4dce7;
+  border-radius: 8px;
+
+  background-color: #ffffff;
+
+  color: #26364a;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+
   box-sizing: border-box;
 }
 
-.add-renter-container button {
-  width: 100%;
-  padding: 10px;
-  cursor: pointer;
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+.add-renter-container input::placeholder {
+  color: #9aa6b5;
 }
+
+
+/* =====================================================
+   INPUT FOCUS
+===================================================== */
+
+.add-renter-container input:focus,
+.add-renter-container select:focus {
+
+  border-color: #3578c4;
+
+  box-shadow:
+    0 0 0 3px rgba(53, 120, 196, 0.12);
+
+  background-color: #ffffff;
+}
+
+
+/* =====================================================
+   READ ONLY FIELDS
+===================================================== */
+
+.add-renter-container input[readonly] {
+
+  background-color: #f5f8fc;
+
+  color: #52657d;
+
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   SELECT
+===================================================== */
+
+.add-renter-container select {
+
+  cursor: pointer;
+
+  appearance: auto;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.add-renter-container p {
+
+  min-height: 20px;
+
+  margin: 2px 0 15px;
+
+  color: #d64545;
+
+  font-size: 14px;
+
+  text-align: center;
+}
+
+
+/* =====================================================
+   ADD RENTER BUTTON
+===================================================== */
+
+.add-renter-container button {
+
+  width: 100%;
+
+  height: 46px;
+
+  padding: 0 20px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background-color: #155db5;
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.add-renter-container input:hover,
+.add-renter-container input:focus,
+.add-renter-container select:hover,
+.add-renter-container select:focus {
+  border-color: #93c5fd;
+  background-color: #ffffff;
+  outline: none;
+  
+}
+/* Button hover */
+
+.add-renter-container button:hover {
+
+  background-color: #104c96;
+
+  box-shadow:
+    0 4px 10px rgba(21, 93, 181, 0.25);
+
+  transform: translateY(-1px);
+}
+
+
+/* Button click */
+
+.add-renter-container button:active {
+
+  transform: translateY(0);
+
+  box-shadow: none;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .add-renter-container {
+
+    max-width: 100%;
+
+    margin: 10px auto;
+
+    padding: 25px 22px;
+
+    border-radius: 12px;
+  }
+
+  .add-renter-container h1 {
+
+    font-size: 25px;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .add-renter-container {
+
+    padding: 22px 16px;
+
+    border-radius: 10px;
+
+    box-shadow: none;
+  }
+
+  .add-renter-container h1 {
+
+    font-size: 23px;
+  }
+
+  .add-renter-container input,
+  .add-renter-container select,
+  .add-renter-container button {
+
+    height: 44px;
+  }
+
+}
+
