@@ -1,0 +1,380 @@
+
+/* =====================================================
+   RESET
+===================================================== */
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+.dashboard {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  background-color: #f4f7fb;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.dashboard-header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 75px;
+
+  z-index: 1000;
+
+  margin: 0;
+  padding: 0 30px;
+
+  background-color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-bottom: 1px solid #dbe3ed;
+
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+
+/* Header hover */
+
+.dashboard-header:hover {
+  background-color: #e8f1fb;
+
+  box-shadow:
+    0 4px 12px rgba(18, 53, 91, 0.15);
+}
+
+
+/* Header title */
+
+.dashboard-header h1 {
+  margin: 0;
+  padding: 0;
+
+  color: #155db5;
+
+  font-family: "Segoe UI", Arial, sans-serif;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =====================================================
+   DASHBOARD BODY
+===================================================== */
+
+.dashboard-body {
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+
+  min-height: 100vh;
+
+  background-color: #f4f7fb;
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.dashboard-sidebar {
+  position: fixed;
+
+  top: 75px;
+  left: 0;
+
+  width: 240px;
+  height: calc(100vh - 75px);
+
+  z-index: 999;
+
+  margin: 0;
+  padding: 25px 15px;
+
+  background-color: #ffffff;
+
+  border-right: 1px solid #dbe3ed;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+/* =====================================================
+   SIDEBAR MAIN BUTTONS
+===================================================== */
+
+.sidebar-item {
+  width: 100%;
+
+  border: none;
+
+  background-color: transparent;
+
+  color: #26364a;
+
+  text-align: left;
+
+  padding: 13px 15px;
+
+  margin-bottom: 6px;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+
+/* Sidebar hover */
+
+.sidebar-item:hover {
+  background-color: #e8f1fb;
+
+  color: #155db5;
+
+  transform: translateX(2px);
+}
+
+
+/* =====================================================
+   RENTER SUBMENU
+===================================================== */
+
+.renter-submenu {
+  width: 100%;
+
+  padding-left: 12px;
+
+  margin-bottom: 8px;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   SIDEBAR SUB BUTTONS
+===================================================== */
+
+.sidebar-subitem {
+  width: 100%;
+
+  border: none;
+
+  background-color: transparent;
+
+  color: #617086;
+
+  text-align: left;
+
+  padding: 10px 15px;
+
+  border-radius: 7px;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+
+/* Submenu hover */
+
+.sidebar-subitem:hover {
+  background-color: #edf5ff;
+
+  color: #1769c2;
+
+  transform: translateX(2px);
+}
+
+
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
+
+.dashboard-content {
+  width: calc(100% - 240px);
+
+  min-width: 0;
+
+  margin-left: 240px;
+  margin-top: 75px;
+
+  min-height: calc(100vh - 75px);
+
+  padding: 35px;
+
+  background-color: #f4f7fb;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+
+/* =====================================================
+   DASHBOARD HOME
+===================================================== */
+
+.dashboard-content h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+
+  font-size: 27px;
+  font-weight: 600;
+
+  color: #172b4d;
+}
+
+.dashboard-content p {
+  color: #65758b;
+
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   RESPONSIVE - TABLET
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .dashboard-sidebar {
+    width: 210px;
+  }
+
+  .dashboard-content {
+    width: calc(100% - 210px);
+
+    margin-left: 210px;
+
+    padding: 25px;
+  }
+
+  .dashboard-header {
+    padding: 0 20px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 23px;
+  }
+}
+
+
+/* =====================================================
+   RESPONSIVE - MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .dashboard-body {
+    display: block;
+  }
+
+  /* Header */
+
+  .dashboard-header {
+    height: 65px;
+
+    padding: 0 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 21px;
+  }
+
+
+  /* Sidebar */
+
+  .dashboard-sidebar {
+    position: fixed;
+
+    top: 65px;
+    left: 0;
+
+    width: 100%;
+    height: auto;
+
+    max-height: 220px;
+
+    padding: 15px;
+
+    border-right: none;
+    border-bottom: 1px solid #dbe3ed;
+
+    overflow-y: auto;
+  }
+
+
+  /* Main content */
+
+  .dashboard-content {
+    width: 100%;
+
+    margin-left: 0;
+    margin-top: 285px;
+
+    min-height: calc(100vh - 285px);
+
+    padding: 20px;
+  }
+}
+

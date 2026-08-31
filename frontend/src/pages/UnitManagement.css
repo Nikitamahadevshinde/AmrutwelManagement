@@ -29,7 +29,7 @@
   border-radius: 12px;
   border: 2px solid transparent;
   text-align: center;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  box-shadow:  rgb(145, 145, 207);
 
   transition: all 0.5s ease;
 
@@ -38,9 +38,10 @@
 
 .stat-card:hover {
   transform: scale(1.03);
-  color: #953e3e;
-  border: 2px solid #b8c8bc;
-  background-color: #759d7c !important;
+  color:  #155db5;
+  border: 2px solid #155db5;
+  font-size: 20px;
+  background-color: #e8f1fb !important;
   box-shadow: 0 8px 20px rgba(146, 96, 96, 0.12);
 }
 
@@ -88,8 +89,8 @@
   border-radius: 12px;
   background: white;
   border: 2px solid transparent;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-
+  /* box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08); */
+   box-shadow:  rgb(145, 145, 207);
   transition: all 0.5s ease;
 
   cursor: pointer;
@@ -97,9 +98,11 @@
 
 .unit-card:hover {
   transform: scale(1.03);
-  color: #953e3e;
-  border: 2px solid #b8c8bc;
-  background-color: #759d7c !important;
+  color: #155db5;
+  font-size: 20px;
+  border: 2px solid #155db5;
+  /* border: 2px solid #b8c8bc; */
+  background-color: #e8f1fb !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 

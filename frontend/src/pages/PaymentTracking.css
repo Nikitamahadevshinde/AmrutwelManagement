@@ -59,11 +59,13 @@
 
   transform: scale(1.03);
 
-  border-color: #b8c8bc;
+  /* border-color: #b8c8bc; */
 
-  background-color: #759d7c;
-
-  color: white;
+  background-color: #e8f1fb !important;;
+  font-size: 20px;
+  color: #155db5;
+   border: 2px solid #155db5;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 
 }
 
@@ -72,8 +74,8 @@
 
 .room-occupied {
 
-  border-left:
-    5px solid #c62828;
+  border:
+    2px solid #c62828;
 }
 
 
@@ -81,8 +83,8 @@
 
 .room-vacant {
 
-  border-left:
-    5px solid #2e7d32;
+  border:
+    2px solid #2e7d32;
 }
 
 
@@ -105,12 +107,12 @@
 
 .payment-details {
 
-  background: white;
-
+  background-color: #e8f1fb !important;
+  border: 2px solid #155db5;;
   padding: 25px;
 
   border-radius: 12px;
-
+  
   box-shadow:
     0 3px 10px rgba(0, 0, 0, 0.08);
 
@@ -173,6 +175,7 @@
   border-collapse: collapse;
 
 }
+
 
 
 .payment-history th,
